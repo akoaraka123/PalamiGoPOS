@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pg_background"
+    tools:context=".MainActivity">
+
+    <!-- Toolbar -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/toolbar_height"
+        android:background="@color/pg_background"
+        android:contentInsetStartWithNavigation="12dp"
+        android:contentInsetEnd="12dp"
+        android:paddingTop="@dimen/toolbar_padding"
+        android:paddingBottom="@dimen/toolbar_padding"
+        app:title="PalamiGoPOS"
+        app:titleTextColor="@color/white"
+        app:titleTextAppearance="@style/TextAppearance.Material3.TitleLarge"
+        app:elevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/menu_main" />
+
+    <!-- Category Chips - Horizontal scroll in landscape to save vertical space -->
+    <HorizontalScrollView
+        android:id="@+id/chipScrollContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/chip_group_margin"
+        android:layout_marginEnd="@dimen/chip_group_margin"
+        android:layout_marginTop="@dimen/chip_group_margin"
+        android:scrollbars="none"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroupCategories"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:chipSpacingHorizontal="@dimen/chip_spacing"
+            app:singleSelection="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipCoffee"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/chip_height"
+                android:checked="true"
+                android:text="Coffee"
+                android:textSize="@dimen/chip_text_size" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipMilk"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/chip_height"
+                android:text="Milk Creation"
+                android:textSize="@dimen/chip_text_size" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipSoda"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/chip_height"
+                android:text="Soda Spark"
+                android:textSize="@dimen/chip_text_size" />
+
+        </com.google.android.material.chip.ChipGroup>
+    </HorizontalScrollView>
+
+    <!-- Products Grid - Takes left portion in landscape -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvProducts"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/rv_margin_horizontal"
+        android:layout_marginEnd="@dimen/rv_margin_horizontal"
+        android:layout_marginTop="@dimen/rv_margin_top"
+        android:layout_marginBottom="@dimen/cart_container_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/cartContainer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/chipScrollContainer"
+        tools:listitem="@layout/item_product" />
+
+    <!-- Cart Container - Fixed width side panel for landscape phones -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cartContainer"
+        android:layout_width="280dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/cart_container_margin"
+        android:layout_marginEnd="@dimen/cart_container_margin"
+        android:layout_marginBottom="@dimen/cart_container_margin"
+        app:cardBackgroundColor="@color/pg_surface_variant"
+        app:cardCornerRadius="@dimen/cart_container_corner"
+        app:cardElevation="4dp"
+        app:strokeColor="@color/pg_divider"
+        app:strokeWidth="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/chipScrollContainer">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="@dimen/cart_container_padding">
+
+            <!-- Cart Header -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Cart"
+                    android:textColor="@color/pg_text_primary"
+                    android:textSize="@dimen/cart_item_name_size"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnEmptyCart"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Empty"
+                    android:textColor="@color/pg_text_secondary" />
+
+            </LinearLayout>
+
+            <!-- Cart Items - Flexible height -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvCart"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:overScrollMode="never"
+                tools:listitem="@layout/item_cart" />
+
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/checkout_btn_margin_top"
+                android:background="@color/pg_divider" />
+
+            <!-- Total Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/checkout_btn_margin_top"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Total"
+                    android:textColor="@color/pg_text_secondary"
+                    android:textSize="@dimen/cart_label_text_size" />
+
+                <TextView
+                    android:id="@+id/tvTotal"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:textColor="@color/pg_gold"
+                    android:textSize="@dimen/cart_total_text_size"
+                    android:textStyle="bold"
+                    tools:text="₱0.00" />
+
+            </LinearLayout>
+
+            <!-- Checkout Button - Always visible at bottom -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCheckout"
+                style="@style/Widget.Material3.Button"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/checkout_btn_height"
+                android:layout_marginTop="@dimen/checkout_btn_margin_top"
+                android:enabled="false"
+                android:text="Checkout"
+                android:textSize="@dimen/checkout_btn_text_size"
+                android:textColor="@color/black"
+                app:backgroundTint="@color/pg_gold"
+                android:alpha="0.55"
+                app:cornerRadius="@dimen/checkout_btn_corner" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Large phones (400dp+) -->
+    <dimen name="product_card_margin">8dp</dimen>
+    <dimen name="product_card_padding">14dp</dimen>
+    <dimen name="product_card_corner">16dp</dimen>
+    <dimen name="product_name_text_size">16sp</dimen>
+    <dimen name="product_price_text_size">14sp</dimen>
+    
+    <dimen name="cart_item_margin">6dp</dimen>
+    <dimen name="cart_item_padding">14dp</dimen>
+    <dimen name="cart_item_name_size">15sp</dimen>
+    <dimen name="cart_item_price_size">13sp</dimen>
+    <dimen name="cart_qty_btn_size">48dp</dimen>
+    <dimen name="cart_qty_text_width">44dp</dimen>
+    
+    <dimen name="cart_container_margin">10dp</dimen>
+    <dimen name="cart_container_padding">12dp</dimen>
+    <dimen name="cart_rv_height">160dp</dimen>
+    <dimen name="cart_total_text_size">22sp</dimen>
+    <dimen name="cart_label_text_size">14sp</dimen>
+    
+    <dimen name="checkout_btn_height">56dp</dimen>
+    <dimen name="checkout_btn_corner">16dp</dimen>
+    <dimen name="checkout_btn_text_size">16sp</dimen>
+    
+    <dimen name="toolbar_height">60dp</dimen>
+    <dimen name="toolbar_title_size">19sp</dimen>
+    
+    <dimen name="chip_spacing">10dp</dimen>
+    <dimen name="chip_text_size">14sp</dimen>
+    
+    <dimen name="rv_margin_horizontal">10dp</dimen>
+    <dimen name="rv_margin_top">10dp</dimen>
+</resources>

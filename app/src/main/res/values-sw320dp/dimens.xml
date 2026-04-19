@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Extra compact dimens for small phones (320dp width) -->
+    
+    <!-- Cart container very compact -->
+    <dimen name="cart_container_margin">6dp</dimen>
+    <dimen name="cart_container_padding">8dp</dimen>
+    <dimen name="cart_container_corner">12dp</dimen>
+    <dimen name="cart_rv_height">110dp</dimen>
+    <dimen name="cart_total_text_size">18sp</dimen>
+    <dimen name="cart_label_text_size">12sp</dimen>
+    
+    <!-- Checkout button compact -->
+    <dimen name="checkout_btn_height">44dp</dimen>
+    <dimen name="checkout_btn_corner">10dp</dimen>
+    <dimen name="checkout_btn_text_size">14sp</dimen>
+    <dimen name="checkout_btn_margin_top">6dp</dimen>
+    
+    <!-- Toolbar compact -->
+    <dimen name="toolbar_height">48dp</dimen>
+    <dimen name="toolbar_padding">4dp</dimen>
+    <dimen name="toolbar_title_size">16sp</dimen>
+    
+    <!-- Chips compact -->
+    <dimen name="chip_group_margin">6dp</dimen>
+    <dimen name="chip_spacing">6dp</dimen>
+    <dimen name="chip_text_size">12sp</dimen>
+    <dimen name="chip_height">36dp</dimen>
+    
+    <!-- Product cards -->
+    <dimen name="product_card_margin">4dp</dimen>
+    <dimen name="product_card_padding">10dp</dimen>
+    <dimen name="product_card_corner">12dp</dimen>
+    <dimen name="product_name_text_size">13sp</dimen>
+    <dimen name="product_price_text_size">12sp</dimen>
+    
+    <!-- RecyclerView -->
+    <dimen name="rv_margin_horizontal">6dp</dimen>
+    <dimen name="rv_margin_top">6dp</dimen>
+</resources>

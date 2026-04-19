@@ -1,0 +1,20 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.PalamiGoPOS" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <item name="colorPrimary">@color/pg_gold</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorSecondary">@color/pg_gold</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorTertiary">@color/pg_gold_dark</item>
+        <item name="colorOnTertiary">@color/black</item>
+
+        <item name="android:statusBarColor">@color/pg_background</item>
+        <item name="android:navigationBarColor">@color/pg_background</item>
+        
+        <!-- Prevent white flash on startup (Android 8.1 and below) -->
+        <item name="android:windowBackground">@color/pg_background</item>
+    </style>
+
+    <style name="Theme.PalamiGoPOS" parent="Base.Theme.PalamiGoPOS" />
+</resources>

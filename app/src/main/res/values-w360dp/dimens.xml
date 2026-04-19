@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Medium phones (360dp+) - slightly larger than small phones -->
+    <dimen name="product_card_margin">7dp</dimen>
+    <dimen name="product_card_padding">13dp</dimen>
+    <dimen name="product_name_text_size">15sp</dimen>
+    <dimen name="product_price_text_size">14sp</dimen>
+    
+    <dimen name="cart_item_padding">13dp</dimen>
+    <dimen name="cart_item_name_size">15sp</dimen>
+    <dimen name="cart_qty_btn_size">46dp</dimen>
+    
+    <dimen name="cart_container_padding">11dp</dimen>
+    <dimen name="cart_rv_height">150dp</dimen>
+    <dimen name="cart_total_text_size">21sp</dimen>
+    
+    <dimen name="checkout_btn_height">54dp</dimen>
+    <dimen name="checkout_btn_text_size">15sp</dimen>
+    
+    <dimen name="chip_text_size">14sp</dimen>
+</resources>

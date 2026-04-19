@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Compact horizontal cart item layout -->
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/cart_item_margin"
+    app:cardBackgroundColor="@color/pg_surface"
+    app:cardCornerRadius="@dimen/cart_item_corner"
+    app:strokeColor="@color/pg_divider"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="@dimen/cart_item_padding">
+
+        <!-- Left: Product info -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/pg_text_primary"
+                android:textSize="@dimen/cart_item_name_size"
+                android:textStyle="bold"
+                android:maxLines="1"
+                android:ellipsize="end" />
+
+            <TextView
+                android:id="@+id/tvPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textColor="@color/pg_text_secondary"
+                android:textSize="@dimen/cart_item_price_size" />
+
+        </LinearLayout>
+
+        <!-- Middle: Qty controls -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnMinus"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="@dimen/cart_qty_btn_size"
+                android:layout_height="@dimen/cart_qty_btn_size"
+                android:insetLeft="0dp"
+                android:insetRight="0dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="−"
+                android:textColor="@color/pg_gold"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvQty"
+                android:layout_width="@dimen/cart_qty_text_width"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/pg_text_primary"
+                android:textSize="@dimen/cart_qty_text_size"
+                android:textStyle="bold" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnPlus"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="@dimen/cart_qty_btn_size"
+                android:layout_height="@dimen/cart_qty_btn_size"
+                android:insetLeft="0dp"
+                android:insetRight="0dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="+"
+                android:textColor="@color/pg_gold"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <!-- Right: Subtotal -->
+        <TextView
+            android:id="@+id/tvSubtotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:gravity="end"
+            android:textColor="@color/pg_gold"
+            android:textSize="@dimen/cart_item_subtotal_size"
+            android:textStyle="bold"
+            android:minWidth="52dp" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

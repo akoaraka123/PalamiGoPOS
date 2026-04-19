@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="pg_background">#FF0F0F10</color>
+    <color name="pg_surface">#FF1A1A1C</color>
+    <color name="pg_surface_variant">#FF242428</color>
+
+    <color name="pg_gold">#FFF5A524</color>
+    <color name="pg_gold_dark">#FFCC7A00</color>
+
+    <color name="pg_text_primary">#FFFFFFFF</color>
+    <color name="pg_text_secondary">#FFBFC3C8</color>
+    <color name="pg_divider">#FF2F2F35</color>
+</resources>

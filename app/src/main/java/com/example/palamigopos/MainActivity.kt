@@ -122,15 +122,28 @@ class MainActivity : AppCompatActivity() {
                 startActivity(Intent(this, ReportsActivity::class.java))
                 true
             }
+            R.id.action_settings -> {
+                startActivity(Intent(this, SettingsActivity::class.java))
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
     override fun onResume() {
         super.onResume()
-        // Refresh products when returning from inventory (in case active status changed)
-        val currentCategory = viewModel.selectedCategory.value ?: "Coffee"
-        viewModel.setCategory(currentCategory)
+        // Check if PIN is required when returning from background
+        if (PinActivity.isPinRequired(this)) {
+            // Redirect to PIN screen
+            val intent = Intent(this, PinActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
+        } else {
+            // Refresh products when returning from inventory (in case active status changed)
+            val currentCategory = viewModel.selectedCategory.value ?: "Coffee"
+            viewModel.setCategory(currentCategory)
+        }
     }
 
     /**

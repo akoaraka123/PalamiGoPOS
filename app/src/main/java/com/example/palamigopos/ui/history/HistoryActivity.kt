@@ -67,4 +67,14 @@ class HistoryActivity : AppCompatActivity() {
             binding.tvTodayOrders.text = summary.orderCount.toString()
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        if (com.example.palamigopos.PinActivity.isPinRequired(this)) {
+            val intent = Intent(this, com.example.palamigopos.PinActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
+        }
+    }
 }

@@ -40,12 +40,14 @@ class OrderDetailsActivity : AppCompatActivity() {
         val total = intent.getDoubleExtra(EXTRA_TOTAL, 0.0)
         val cash = intent.getDoubleExtra(EXTRA_CASH, 0.0)
         val change = intent.getDoubleExtra(EXTRA_CHANGE, 0.0)
+        val paymentMethod = intent.getStringExtra(EXTRA_PAYMENT_METHOD) ?: "Cash"
 
         binding.toolbar.title = orderNumber
         binding.toolbar.setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
         binding.toolbar.setNavigationOnClickListener { finish() }
 
         binding.tvTotal.text = "Total: ${CurrencyUtils.format(total)}"
+        binding.tvPaymentMethod.text = "Payment: $paymentMethod"
         binding.tvCash.text = "Cash: ${CurrencyUtils.format(cash)}"
         binding.tvChange.text = "Change: ${CurrencyUtils.format(change)}"
 
@@ -63,5 +65,6 @@ class OrderDetailsActivity : AppCompatActivity() {
         const val EXTRA_TOTAL = "extra_total"
         const val EXTRA_CASH = "extra_cash"
         const val EXTRA_CHANGE = "extra_change"
+        const val EXTRA_PAYMENT_METHOD = "extra_payment_method"
     }
 }

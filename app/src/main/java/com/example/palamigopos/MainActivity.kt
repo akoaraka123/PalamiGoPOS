@@ -5,16 +5,22 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.EditText
+import android.widget.RadioButton
+import android.widget.RadioGroup
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.palamigopos.R
 import com.example.palamigopos.data.local.AppDatabase
 import com.example.palamigopos.databinding.ActivityMainBinding
-import com.example.palamigopos.databinding.DialogCheckoutBinding
 import com.example.palamigopos.ui.adapter.CartAdapter
 import com.example.palamigopos.ui.adapter.ProductAdapter
 import com.example.palamigopos.ui.history.HistoryActivity
@@ -24,7 +30,9 @@ import com.example.palamigopos.ui.reports.ReportsActivity
 import com.example.palamigopos.utils.CurrencyUtils
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputLayout
 import android.content.Intent
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -68,9 +76,12 @@ class MainActivity : AppCompatActivity() {
             adapter = cartAdapter
         }
 
-        binding.chipCoffee.setOnClickListener { viewModel.setCategory("Coffee") }
-        binding.chipMilk.setOnClickListener { viewModel.setCategory("Milk Creation") }
-        binding.chipSoda.setOnClickListener { viewModel.setCategory("Soda Spark") }
+        // Observe categories and dynamically create chips
+        lifecycleScope.launch {
+            viewModel.categories.collect { categories ->
+                updateCategoryChips(categories)
+            }
+        }
 
         // Restore category chip selection on rotation
         viewModel.selectedCategory.value?.let { updateCategoryChipSelection(it) }
@@ -132,17 +143,37 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        // Check if PIN is required when returning from background
-        if (PinActivity.isPinRequired(this)) {
-            // Redirect to PIN screen
-            val intent = Intent(this, PinActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
-            finish()
-        } else {
-            // Refresh products when returning from inventory (in case active status changed)
-            val currentCategory = viewModel.selectedCategory.value ?: "Coffee"
-            viewModel.setCategory(currentCategory)
+        // Refresh products when returning from inventory (in case active status changed)
+        val currentCategory = viewModel.selectedCategory.value
+        currentCategory?.let { viewModel.setCategory(it) }
+    }
+
+    /**
+     * Dynamically creates category chips based on categories from database
+     */
+    private fun updateCategoryChips(categories: List<com.example.palamigopos.data.model.CategoryEntity>) {
+        binding.chipGroupCategories.removeAllViews()
+        
+        categories.forEach { category ->
+            val chip = com.google.android.material.chip.Chip(this).apply {
+                text = category.name
+                isCheckable = true
+                isClickable = true
+                setOnClickListener {
+                    viewModel.setCategory(category.name)
+                }
+                setOnCheckedChangeListener { _, isChecked ->
+                    if (isChecked) {
+                        viewModel.setCategory(category.name)
+                    }
+                }
+            }
+            binding.chipGroupCategories.addView(chip)
+        }
+        
+        // Select the first category by default if none selected
+        if (binding.chipGroupCategories.checkedChipId == -1 && categories.isNotEmpty()) {
+            (binding.chipGroupCategories.getChildAt(0) as? com.google.android.material.chip.Chip)?.isChecked = true
         }
     }
 
@@ -151,22 +182,9 @@ class MainActivity : AppCompatActivity() {
      * Called on rotation to restore UI state.
      */
     private fun updateCategoryChipSelection(category: String) {
-        when (category) {
-            "Coffee" -> {
-                binding.chipCoffee.isChecked = true
-                binding.chipMilk.isChecked = false
-                binding.chipSoda.isChecked = false
-            }
-            "Milk Creation" -> {
-                binding.chipCoffee.isChecked = false
-                binding.chipMilk.isChecked = true
-                binding.chipSoda.isChecked = false
-            }
-            "Soda Spark" -> {
-                binding.chipCoffee.isChecked = false
-                binding.chipMilk.isChecked = false
-                binding.chipSoda.isChecked = true
-            }
+        for (i in 0 until binding.chipGroupCategories.childCount) {
+            val chip = binding.chipGroupCategories.getChildAt(i) as? com.google.android.material.chip.Chip
+            chip?.isChecked = (chip.text == category)
         }
     }
 
@@ -204,16 +222,28 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showCheckoutDialog() {
-        val dialogBinding = DialogCheckoutBinding.inflate(layoutInflater)
+        val dialogView = layoutInflater.inflate(R.layout.dialog_checkout, null)
         val total = viewModel.totalAmount.value ?: 0.0
-        dialogBinding.tvTotal.text = "Total: ${CurrencyUtils.format(total)}"
-        dialogBinding.tvPaymentStatus.text = "Enter cash amount"
+
+        val tvTotal = dialogView.findViewById<TextView>(R.id.tvTotal)
+        val tvPaymentStatus = dialogView.findViewById<TextView>(R.id.tvPaymentStatus)
+        val rgPaymentMethod = dialogView.findViewById<RadioGroup>(R.id.rgPaymentMethod)
+        val rbCash = dialogView.findViewById<RadioButton>(R.id.rbCash)
+        val rbGCash = dialogView.findViewById<RadioButton>(R.id.rbGCash)
+        val tilCash = dialogView.findViewById<TextInputLayout>(R.id.tilCash)
+        val tilGCashRef = dialogView.findViewById<TextInputLayout>(R.id.tilGCashRef)
+        val etCash = dialogView.findViewById<EditText>(R.id.etCash)
+
+        tvTotal.text = "Total: ${CurrencyUtils.format(total)}"
+        tvPaymentStatus.text = "Enter cash amount"
 
         var cashValue = 0.0
+        var paymentMethod = "Cash"
 
         fun updateStatus() {
             val change = viewModel.computeChange(cashValue)
-            dialogBinding.tvPaymentStatus.text = when {
+            tvPaymentStatus.text = when {
+                paymentMethod == "GCash" -> "GCash Payment"
                 cashValue <= 0.0 -> "Enter cash amount"
                 change < 0.0 -> "Insufficient Amount"
                 change == 0.0 -> "Exact Payment"
@@ -221,7 +251,24 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        dialogBinding.etCash.addTextChangedListener(object : TextWatcher {
+        rgPaymentMethod.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                rbCash.id -> {
+                    paymentMethod = "Cash"
+                    tilCash.visibility = android.view.View.VISIBLE
+                    tilGCashRef.visibility = android.view.View.GONE
+                }
+                rbGCash.id -> {
+                    paymentMethod = "GCash"
+                    tilCash.visibility = android.view.View.GONE
+                    tilGCashRef.visibility = android.view.View.VISIBLE
+                    cashValue = total
+                }
+            }
+            updateStatus()
+        }
+
+        etCash.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
             override fun afterTextChanged(s: Editable?) {
@@ -233,20 +280,31 @@ class MainActivity : AppCompatActivity() {
         updateStatus()
 
         val dialog = MaterialAlertDialogBuilder(this)
-            .setView(dialogBinding.root)
+            .setView(dialogView)
             .setNegativeButton("Cancel", null)
             .setPositiveButton("Confirm", null)
             .create()
 
+        // Set dialog background to match app dark theme
+        dialog.window?.setBackgroundDrawableResource(R.color.pg_surface)
+
         dialog.setOnShowListener {
             val positive = dialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_POSITIVE)
+            val negative = dialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_NEGATIVE)
             positive.isEnabled = false
 
+            // Set button text colors to be visible on dark background
+            positive.setTextColor(ContextCompat.getColor(this, R.color.pg_gold))
+            negative.setTextColor(ContextCompat.getColor(this, R.color.pg_text_secondary))
+
             fun updateConfirmEnabled() {
-                positive.isEnabled = cashValue >= total && total > 0.0
+                positive.isEnabled = when (paymentMethod) {
+                    "GCash" -> total > 0.0
+                    else -> cashValue >= total && total > 0.0
+                }
             }
 
-            dialogBinding.etCash.addTextChangedListener(object : TextWatcher {
+            etCash.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
                 override fun afterTextChanged(s: Editable?) {
@@ -256,11 +314,30 @@ class MainActivity : AppCompatActivity() {
                 }
             })
 
+            rgPaymentMethod.setOnCheckedChangeListener { _, checkedId ->
+                when (checkedId) {
+                    rbCash.id -> {
+                        paymentMethod = "Cash"
+                        tilCash.visibility = android.view.View.VISIBLE
+                        tilGCashRef.visibility = android.view.View.GONE
+                    }
+                    rbGCash.id -> {
+                        paymentMethod = "GCash"
+                        tilCash.visibility = android.view.View.GONE
+                        tilGCashRef.visibility = android.view.View.VISIBLE
+                        cashValue = total
+                    }
+                }
+                updateStatus()
+                updateConfirmEnabled()
+            }
+
             updateConfirmEnabled()
 
             positive.setOnClickListener {
                 viewModel.confirmPayment(
                     cashReceived = cashValue,
+                    paymentMethod = paymentMethod,
                     onSuccess = {
                         dialog.dismiss()
                         Snackbar.make(binding.root, "Order saved", Snackbar.LENGTH_SHORT).show()

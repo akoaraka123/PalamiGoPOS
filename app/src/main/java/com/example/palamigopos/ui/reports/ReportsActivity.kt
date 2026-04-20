@@ -13,6 +13,9 @@ import com.example.palamigopos.databinding.ActivityReportsBinding
 import com.example.palamigopos.ui.adapter.DailyReportAdapter
 import com.example.palamigopos.ui.history.HistoryActivity
 import com.example.palamigopos.utils.collectIn
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class ReportsActivity : AppCompatActivity() {
 
@@ -23,8 +26,15 @@ class ReportsActivity : AppCompatActivity() {
     }
 
     private val adapter = DailyReportAdapter { report ->
-        // Optional: open history filtered by date (simplified: opens history)
-        startActivity(Intent(this, HistoryActivity::class.java))
+        // Calculate start and end of the day for the report
+        val startOfDay = report.dateMillis
+        val endOfDay = report.dateMillis + 86400000 - 1 // End of that day
+        
+        startActivity(Intent(this, HistoryActivity::class.java).apply {
+            putExtra(HistoryActivity.EXTRA_START_DATE, startOfDay)
+            putExtra(HistoryActivity.EXTRA_END_DATE, endOfDay)
+            putExtra(HistoryActivity.EXTRA_DATE_LABEL, formatReportDate(report.dateMillis))
+        })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,5 +74,10 @@ class ReportsActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+    }
+
+    private fun formatReportDate(dateMillis: Long): String {
+        val dateFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
+        return dateFormat.format(Date(dateMillis))
     }
 }

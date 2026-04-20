@@ -24,7 +24,45 @@
         android:textSize="24sp"
         android:textStyle="bold" />
 
+    <!-- Payment Method Selection -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Payment Method"
+        android:textColor="@color/pg_text_secondary"
+        android:textSize="14sp" />
+
+    <RadioGroup
+        android:id="@+id/rgPaymentMethod"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal">
+
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/rbCash"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="Cash"
+            android:textColor="@color/pg_text_primary"
+            android:buttonTint="@color/pg_green" />
+
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/rbGCash"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="GCash"
+            android:textColor="@color/pg_text_primary"
+            android:buttonTint="@color/pg_blue" />
+
+    </RadioGroup>
+
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilCash"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
@@ -38,6 +76,28 @@
             android:layout_height="wrap_content"
             android:hint="Cash received"
             android:inputType="numberDecimal"
+            android:textColor="@color/pg_text_primary"
+            android:textColorHint="@color/pg_text_secondary" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- GCash Reference Number -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilGCashRef"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:visibility="gone"
+        app:boxBackgroundMode="filled"
+        app:boxBackgroundColor="@color/pg_surface_variant"
+        app:hintTextColor="@color/pg_text_secondary">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etGCashRef"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="GCash Reference Number (optional)"
+            android:inputType="text"
             android:textColor="@color/pg_text_primary"
             android:textColorHint="@color/pg_text_secondary" />
 

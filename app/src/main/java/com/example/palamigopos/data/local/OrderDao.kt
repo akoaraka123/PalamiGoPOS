@@ -32,6 +32,12 @@ interface OrderDao {
     @Query("SELECT COUNT(*) FROM orders")
     suspend fun getOrderCount(): Int
 
+    @Query("DELETE FROM orders WHERE id = :orderId")
+    suspend fun deleteOrder(orderId: Int)
+
+    @Query("SELECT * FROM orders WHERE createdAt BETWEEN :startMillis AND :endMillis ORDER BY createdAt DESC")
+    fun getOrdersByDateRange(startMillis: Long, endMillis: Long): Flow<List<OrderEntity>>
+
     // Daily sales report: groups by calendar date (local time) from createdAt
     @Query("""
         SELECT 

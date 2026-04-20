@@ -42,31 +42,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:singleSelection="true">
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chipCoffee"
-            style="@style/Widget.Material3.Chip.Filter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="Coffee" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chipMilk"
-            style="@style/Widget.Material3.Chip.Filter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Milk Creation" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chipSoda"
-            style="@style/Widget.Material3.Chip.Filter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Soda Spark" />
-
-    </com.google.android.material.chip.ChipGroup>
+        app:singleSelection="true" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvProducts"
@@ -131,7 +107,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvCart"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/cart_rv_height"
+                android:layout_height="220dp"
+                android:layout_marginTop="8dp"
                 android:overScrollMode="never"
                 tools:listitem="@layout/item_cart" />
 

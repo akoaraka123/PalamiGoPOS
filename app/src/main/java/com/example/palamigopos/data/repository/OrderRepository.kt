@@ -29,6 +29,13 @@ class OrderRepository(
 
     suspend fun getOrderCount(): Int = orderDao.getOrderCount()
 
+    suspend fun deleteOrder(orderId: Int) {
+        orderDao.deleteOrder(orderId)
+    }
+
+    fun getOrdersByDateRange(startMillis: Long, endMillis: Long): Flow<List<OrderEntity>> =
+        orderDao.getOrdersByDateRange(startMillis, endMillis)
+
     fun getDailySalesReports(): Flow<List<DailySalesReport>> =
         orderDao.getDailySalesReports().map { tuples ->
             tuples.map { DailySalesReport(it.dateMillis, it.totalSales, it.totalOrders) }

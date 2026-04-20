@@ -7,11 +7,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.palamigopos.data.local.AppDatabase
 import com.example.palamigopos.data.model.CartItem
+import com.example.palamigopos.data.model.CategoryEntity
 import com.example.palamigopos.data.model.OrderEntity
 import com.example.palamigopos.data.model.OrderItemEntity
 import com.example.palamigopos.data.model.ProductEntity
+import com.example.palamigopos.data.repository.CategoryRepository
 import com.example.palamigopos.data.repository.OrderRepository
 import com.example.palamigopos.data.repository.ProductRepository
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.Job
 import java.text.SimpleDateFormat
@@ -20,11 +25,15 @@ import java.util.Locale
 
 class PosViewModel(
     private val productRepository: ProductRepository,
-    private val orderRepository: OrderRepository
+    private val orderRepository: OrderRepository,
+    private val categoryRepository: CategoryRepository
 ) : ViewModel() {
 
-    private val _selectedCategory = MutableLiveData("Coffee")
+    private val _selectedCategory = MutableLiveData<String>()
     val selectedCategory: LiveData<String> = _selectedCategory
+
+    val categories: StateFlow<List<CategoryEntity>> = categoryRepository.getAllCategories()
+        .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
     private val _products = MutableLiveData<List<ProductEntity>>(emptyList())
     val products: LiveData<List<ProductEntity>> = _products
@@ -38,7 +47,15 @@ class PosViewModel(
     val totalAmount: LiveData<Double> = _totalAmount
 
     init {
-        loadProductsForCategory("Coffee")
+        // Set initial category when categories are loaded
+        viewModelScope.launch {
+            categories.collect { categoryList ->
+                if (_selectedCategory.value == null && categoryList.isNotEmpty()) {
+                    _selectedCategory.value = categoryList.first().name
+                    loadProductsForCategory(categoryList.first().name)
+                }
+            }
+        }
     }
 
     fun setCategory(category: String) {
@@ -126,6 +143,7 @@ class PosViewModel(
 
     fun confirmPayment(
         cashReceived: Double,
+        paymentMethod: String = "Cash",
         onSuccess: () -> Unit,
         onError: (String) -> Unit
     ) {
@@ -151,6 +169,7 @@ class PosViewModel(
                     totalAmount = total,
                     cashReceived = cashReceived,
                     changeAmount = change,
+                    paymentMethod = paymentMethod,
                     createdAt = now
                 )
 
@@ -184,7 +203,8 @@ class PosViewModel(
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val productRepo = ProductRepository(database.productDao())
             val orderRepo = OrderRepository(database.orderDao())
-            return PosViewModel(productRepo, orderRepo) as T
+            val categoryRepo = CategoryRepository(database.categoryDao())
+            return PosViewModel(productRepo, orderRepo, categoryRepo) as T
         }
     }
 }

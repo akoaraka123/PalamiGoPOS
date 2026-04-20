@@ -11,5 +11,6 @@ data class OrderEntity(
     val totalAmount: Double,
     val cashReceived: Double,
     val changeAmount: Double,
+    val paymentMethod: String = "Cash",
     val createdAt: Long
 )

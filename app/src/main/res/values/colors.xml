@@ -10,6 +10,9 @@
     <color name="pg_gold">#FFF5A524</color>
     <color name="pg_gold_dark">#FFCC7A00</color>
 
+    <color name="pg_green">#FF4CAF50</color>
+    <color name="pg_blue">#FF2196F3</color>
+
     <color name="pg_text_primary">#FFFFFFFF</color>
     <color name="pg_text_secondary">#FFBFC3C8</color>
     <color name="pg_divider">#FF2F2F35</color>
